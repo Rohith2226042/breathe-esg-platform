@@ -133,40 +133,53 @@ function App() {
 
   const uploadCsv = async () => {
 
-    if (!selectedFile) {
+  if (!selectedFile) {
 
-      alert("Please select CSV file");
+    alert("Please select CSV file");
 
-      return;
-    }
+    return;
+  }
 
-    const formData = new FormData();
+  const formData = new FormData();
 
-    formData.append("file", selectedFile);
+  formData.append("file", selectedFile);
 
-    try {
+  try {
 
-      await axios.post(
-        `${API_BASE}/api/upload-csv/`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data"
-          }
+    const response = await axios.post(
+      `${API_BASE}/api/upload-csv/`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data"
         }
+      }
+    );
+
+    console.log(response.data);
+
+    alert("CSV uploaded successfully");
+
+    fetchRecords();
+
+  } catch (error) {
+
+    console.error(error);
+
+    console.log(error.response);
+
+    if (error.response?.data) {
+
+      alert(
+        JSON.stringify(error.response.data)
       );
 
-      alert("CSV uploaded successfully");
-
-      fetchRecords();
-
-    } catch (error) {
-
-      console.error(error);
+    } else {
 
       alert("CSV upload failed");
     }
-  };
+  }
+};
 
   return (
 
