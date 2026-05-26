@@ -1,0 +1,143 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #0f172a;
+  color: white;
+}
+
+.app-container {
+  padding: 30px;
+}
+
+.dashboard-title {
+  text-align: center;
+  font-size: 56px;
+  margin-bottom: 30px;
+}
+
+.upload-section {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-section {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.search-input {
+  padding: 10px;
+  width: 250px;
+  border-radius: 8px;
+  border: none;
+}
+
+.upload-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+.upload-button:hover {
+  background-color: #1d4ed8;
+}
+
+.cards-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.card {
+  padding: 20px;
+  border-radius: 12px;
+  width: 220px;
+  text-align: center;
+  color: #111827;
+  font-weight: bold;
+}
+
+.total-card {
+  background-color: #dbeafe;
+}
+
+.suspicious-card {
+  background-color: #fecaca;
+}
+
+.approved-card {
+  background-color: #bbf7d0;
+}
+
+.pending-card {
+  background-color: #fde68a;
+}
+
+.records-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  color: black;
+}
+
+.records-table th,
+.records-table td {
+  border: 1px solid #d1d5db;
+  padding: 12px;
+  text-align: center;
+}
+
+.records-table th {
+  background-color: #1e293b;
+  color: white;
+}
+
+.suspicious-row {
+  background-color: #fee2e2;
+}
+
+.action-button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+}
+
+.approve-button {
+  background-color: green;
+}
+
+.reject-button {
+  background-color: red;
+  margin-left: 10px;
+}
+
+.status-pill {
+  padding: 6px 12px;
+  border-radius: 999px;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.status-approved {
+  background-color: green;
+}
+
+.status-rejected {
+  background-color: red;
+}
+
+.status-pending {
+  background-color: orange;
+}

@@ -1,0 +1,5 @@
+
+activity_type,quantity,unit,record_date
+Diesel Consumption,500,Liters,2026-05-01
+Petrol Consumption,1200,Liters,2026-05-02
+Industrial Fuel Oil,25000,Liters,2026-05-03
