@@ -12,6 +12,9 @@ import {
 
 function App() {
 
+  const API_BASE =
+    "https://breathe-esg-platform-hmrs.onrender.com";
+
   const [records, setRecords] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -23,34 +26,30 @@ function App() {
   const totalRecords = records.length;
 
   const suspiciousRecords = records.filter(
-    record => record.is_suspicious
+    (record) => record.is_suspicious
   ).length;
 
   const approvedRecords = records.filter(
-    record => record.status === "APPROVED"
+    (record) => record.status === "APPROVED"
   ).length;
 
   const pendingRecords = records.filter(
-    record => record.status === "PENDING"
+    (record) => record.status === "PENDING"
   ).length;
 
   const chartData = [
-
     {
       name: "Approved",
       value: approvedRecords
     },
-
     {
       name: "Pending",
       value: pendingRecords
     },
-
     {
       name: "Suspicious",
       value: suspiciousRecords
     }
-
   ];
 
   const COLORS = [
@@ -83,38 +82,61 @@ function App() {
     try {
 
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/emissions/"
+        `${API_BASE}/api/emissions/`
       );
 
       setRecords(response.data);
 
     } catch (error) {
+
       console.error(error);
+
+      alert("Failed to fetch records");
     }
   };
 
   const approveRecord = async (id) => {
 
-    await axios.post(
-      `http://127.0.0.1:8000/api/emissions/${id}/approve/`
-    );
+    try {
 
-    fetchRecords();
+      await axios.post(
+        `${API_BASE}/api/emissions/${id}/approve/`
+      );
+
+      fetchRecords();
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert("Approval failed");
+    }
   };
 
   const rejectRecord = async (id) => {
 
-    await axios.post(
-      `http://127.0.0.1:8000/api/emissions/${id}/reject/`
-    );
+    try {
 
-    fetchRecords();
+      await axios.post(
+        `${API_BASE}/api/emissions/${id}/reject/`
+      );
+
+      fetchRecords();
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert("Reject failed");
+    }
   };
 
   const uploadCsv = async () => {
 
     if (!selectedFile) {
-      alert("Please select a CSV file");
+
+      alert("Please select CSV file");
+
       return;
     }
 
@@ -125,7 +147,7 @@ function App() {
     try {
 
       await axios.post(
-        "http://127.0.0.1:8000/api/upload-csv/",
+        `${API_BASE}/api/upload-csv/`,
         formData,
         {
           headers: {
@@ -139,8 +161,10 @@ function App() {
       fetchRecords();
 
     } catch (error) {
+
       console.error(error);
-      alert("Upload failed");
+
+      alert("CSV upload failed");
     }
   };
 
@@ -157,7 +181,9 @@ function App() {
         <input
           type="file"
           accept=".csv"
-          onChange={(e) => setSelectedFile(e.target.files[0])}
+          onChange={(e) =>
+            setSelectedFile(e.target.files[0])
+          }
         />
 
         <button
@@ -175,7 +201,9 @@ function App() {
           type="text"
           placeholder="Search activity..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) =>
+            setSearchTerm(e.target.value)
+          }
           className="search-input"
         />
 
@@ -185,7 +213,9 @@ function App() {
             type="checkbox"
             checked={showSuspiciousOnly}
             onChange={(e) =>
-              setShowSuspiciousOnly(e.target.checked)
+              setShowSuspiciousOnly(
+                e.target.checked
+              )
             }
           />
 
@@ -260,16 +290,27 @@ function App() {
       <table className="records-table">
 
         <thead>
+
           <tr>
+
             <th>ID</th>
+
             <th>Activity</th>
+
             <th>Quantity</th>
+
             <th>Scope</th>
+
             <th>Status</th>
+
             <th>Suspicious</th>
+
             <th>Analyst Notes</th>
+
             <th>Actions</th>
+
           </tr>
+
         </thead>
 
         <tbody>
@@ -312,13 +353,18 @@ function App() {
               </td>
 
               <td>
-                {record.is_suspicious ? "⚠️ Yes" : "No"}
+                {record.is_suspicious
+                  ? "⚠️ Yes"
+                  : "No"}
               </td>
 
               <td>
 
                 <textarea
                   placeholder="Add analyst notes..."
+                  defaultValue={
+                    record.analyst_notes || ""
+                  }
                   rows="2"
                   style={{
                     width: "180px",
@@ -332,14 +378,18 @@ function App() {
               <td>
 
                 <button
-                  onClick={() => approveRecord(record.id)}
+                  onClick={() =>
+                    approveRecord(record.id)
+                  }
                   className="action-button approve-button"
                 >
                   Approve
                 </button>
 
                 <button
-                  onClick={() => rejectRecord(record.id)}
+                  onClick={() =>
+                    rejectRecord(record.id)
+                  }
                   className="action-button reject-button"
                 >
                   Reject
