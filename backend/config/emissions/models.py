@@ -2,6 +2,7 @@ from django.db import models
 
 
 class Organization(models.Model):
+
     name = models.CharField(max_length=255)
 
     def __str__(self):
@@ -10,28 +11,10 @@ class Organization(models.Model):
 
 class DataSource(models.Model):
 
-    SOURCE_TYPES = [
-        ('SAP', 'SAP'),
-        ('UTILITY', 'Utility'),
-        ('TRAVEL', 'Travel'),
-    ]
-
-    organization = models.ForeignKey(
-        Organization,
-        on_delete=models.CASCADE
-    )
-
-    source_type = models.CharField(
-        max_length=20,
-        choices=SOURCE_TYPES
-    )
-
-    file_name = models.CharField(max_length=255)
-
-    uploaded_at = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.file_name
+        return self.name
 
 
 class EmissionRecord(models.Model):
@@ -42,47 +25,39 @@ class EmissionRecord(models.Model):
         ('REJECTED', 'Rejected'),
     ]
 
-    SCOPE_CHOICES = [
-        ('SCOPE_1', 'Scope 1'),
-        ('SCOPE_2', 'Scope 2'),
-        ('SCOPE_3', 'Scope 3'),
-    ]
-
-    organization = models.ForeignKey(
-        Organization,
-        on_delete=models.CASCADE
-    )
-
-    data_source = models.ForeignKey(
-        DataSource,
-        on_delete=models.CASCADE
-    )
-
     scope = models.CharField(
-        max_length=20,
-        choices=SCOPE_CHOICES
+        max_length=50,
+        default='SCOPE_1'
     )
 
-    activity_type = models.CharField(max_length=255)
+    activity_type = models.CharField(
+        max_length=255
+    )
 
     quantity = models.FloatField()
 
-    unit = models.CharField(max_length=50)
+    unit = models.CharField(
+        max_length=50,
+        default='Liters'
+    )
 
     normalized_quantity = models.FloatField(
-        null=True,
-        blank=True
+        default=0
     )
 
     normalized_unit = models.CharField(
         max_length=50,
+        default='Liters'
+    )
+
+    record_date = models.DateField(
         null=True,
         blank=True
     )
 
-    record_date = models.DateField()
-
-    is_suspicious = models.BooleanField(default=False)
+    is_suspicious = models.BooleanField(
+        default=False
+    )
 
     status = models.CharField(
         max_length=20,
@@ -91,11 +66,28 @@ class EmissionRecord(models.Model):
     )
 
     analyst_notes = models.TextField(
-    blank=True,
-    null=True
-)
+        blank=True,
+        null=True
+    )
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    organization = models.ForeignKey(
+        Organization,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+
+    data_source = models.ForeignKey(
+        DataSource,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
 
     def __str__(self):
+
         return self.activity_type
