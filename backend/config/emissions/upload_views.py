@@ -26,20 +26,26 @@ def upload_csv(request):
 
         filename = csv_file.name.lower()
 
-if 'utility' in filename:
-    source_type = 'UTILITY'
+        # Detect source type
 
-elif 'travel' in filename:
-    source_type = 'TRAVEL'
+        if 'utility' in filename:
+            source_type = 'UTILITY'
 
-else:
-    source_type = 'SAP'
+        elif 'travel' in filename:
+            source_type = 'TRAVEL'
 
+        else:
+            source_type = 'SAP'
 
-data_source = DataSource.objects.create(
-    source_type=source_type,
-    file_name=csv_file.name
-)
+        # Create datasource
+
+        data_source = DataSource.objects.create(
+            source_type=source_type,
+            file_name=csv_file.name
+        )
+
+        # Process rows
+
         for _, row in df.iterrows():
 
             activity = str(
@@ -56,7 +62,28 @@ data_source = DataSource.objects.create(
 
             record_date = row.get('record_date')
 
-            suspicious = quantity > 10000
+            # Normalization logic
+
+            if unit.lower() == 'gallons':
+
+                normalized_quantity = quantity * 3.785
+                normalized_unit = 'Liters'
+
+            elif unit.lower() == 'mwh':
+
+                normalized_quantity = quantity * 1000
+                normalized_unit = 'kWh'
+
+            else:
+
+                normalized_quantity = quantity
+                normalized_unit = unit
+
+            # Suspicious detection
+
+            suspicious = normalized_quantity > 10000
+
+            # Save emission record
 
             EmissionRecord.objects.create(
                 data_source=data_source,
@@ -64,8 +91,8 @@ data_source = DataSource.objects.create(
                 activity_type=activity,
                 quantity=quantity,
                 unit=unit,
-                normalized_quantity=quantity,
-                normalized_unit=unit,
+                normalized_quantity=normalized_quantity,
+                normalized_unit=normalized_unit,
                 record_date=record_date,
                 is_suspicious=suspicious,
                 status='PENDING'
