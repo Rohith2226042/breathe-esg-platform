@@ -176,7 +176,8 @@ function App() {
 
     } else {
 
-      alert("CSV upload failed");
+      alert("Server connection failed");
+
     }
   }
 };
