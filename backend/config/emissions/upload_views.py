@@ -3,7 +3,10 @@ import pandas as pd
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import DataSource, EmissionRecord
+from .models import (
+    DataSource,
+    EmissionRecord
+)
 
 
 @api_view(['POST'])
@@ -29,26 +32,18 @@ def upload_csv(request):
         for _, row in df.iterrows():
 
             activity = str(
-                row.get('Activity')
-                or row.get('Fuel Type')
-                or row.get('Description')
-                or row.get('Category')
-                or 'Unknown'
+                row.get('activity_type', 'Unknown')
             )
 
             quantity = float(
-                row.get('Quantity')
-                or row.get('Amount')
-                or row.get('Liters')
-                or row.get('Value')
-                or 0
+                row.get('quantity', 0)
             )
 
             unit = str(
-                row.get('Unit')
-                or row.get('UOM')
-                or 'Liters'
+                row.get('unit', 'Liters')
             )
+
+            record_date = row.get('record_date')
 
             suspicious = quantity > 10000
 
@@ -60,6 +55,7 @@ def upload_csv(request):
                 unit=unit,
                 normalized_quantity=quantity,
                 normalized_unit=unit,
+                record_date=record_date,
                 is_suspicious=suspicious,
                 status='PENDING'
             )
