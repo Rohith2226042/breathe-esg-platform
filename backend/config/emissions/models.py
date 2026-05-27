@@ -28,7 +28,9 @@ class DataSource(models.Model):
         default='uploaded.csv'
     )
 
-    uploaded_at = models.DateTimeField(auto_now_add=True)
+    uploaded_at = models.DateTimeField(
+        auto_now_add=True
+    )
 
     def __str__(self):
         return self.file_name
@@ -103,6 +105,15 @@ class EmissionRecord(models.Model):
 
     created_at = models.DateTimeField(
         auto_now_add=True
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    reviewed_at = models.DateTimeField(
+        null=True,
+        blank=True
     )
 
     def __str__(self):

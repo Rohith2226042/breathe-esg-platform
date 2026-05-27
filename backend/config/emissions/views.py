@@ -1,3 +1,5 @@
+from django.utils.timezone import now
+
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -16,16 +18,19 @@ from .serializers import (
 
 
 class OrganizationViewSet(viewsets.ModelViewSet):
+
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
 
 
 class DataSourceViewSet(viewsets.ModelViewSet):
+
     queryset = DataSource.objects.all()
     serializer_class = DataSourceSerializer
 
 
 class EmissionRecordViewSet(viewsets.ModelViewSet):
+
     queryset = EmissionRecord.objects.all()
     serializer_class = EmissionRecordSerializer
 
@@ -35,6 +40,8 @@ class EmissionRecordViewSet(viewsets.ModelViewSet):
         record = self.get_object()
 
         record.status = 'APPROVED'
+        record.reviewed_at = now()
+
         record.save()
 
         return Response({
@@ -47,6 +54,8 @@ class EmissionRecordViewSet(viewsets.ModelViewSet):
         record = self.get_object()
 
         record.status = 'REJECTED'
+        record.reviewed_at = now()
+
         record.save()
 
         return Response({
