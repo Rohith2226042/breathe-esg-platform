@@ -29,15 +29,25 @@ def upload_csv(request):
         for _, row in df.iterrows():
 
             activity = str(
-                row.get('Activity', 'Unknown')
+                row.get('Activity')
+                or row.get('Fuel Type')
+                or row.get('Description')
+                or row.get('Category')
+                or 'Unknown'
             )
 
             quantity = float(
-                row.get('Quantity', 0)
+                row.get('Quantity')
+                or row.get('Amount')
+                or row.get('Liters')
+                or row.get('Value')
+                or 0
             )
 
             unit = str(
-                row.get('Unit', 'Liters')
+                row.get('Unit')
+                or row.get('UOM')
+                or 'Liters'
             )
 
             suspicious = quantity > 10000
