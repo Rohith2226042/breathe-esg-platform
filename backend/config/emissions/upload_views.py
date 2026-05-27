@@ -24,11 +24,22 @@ def upload_csv(request):
 
         df = pd.read_csv(csv_file)
 
-        data_source = DataSource.objects.create(
-            source_type='SAP',
-            file_name=csv_file.name
-        )
+        filename = csv_file.name.lower()
 
+if 'utility' in filename:
+    source_type = 'UTILITY'
+
+elif 'travel' in filename:
+    source_type = 'TRAVEL'
+
+else:
+    source_type = 'SAP'
+
+
+data_source = DataSource.objects.create(
+    source_type=source_type,
+    file_name=csv_file.name
+)
         for _, row in df.iterrows():
 
             activity = str(
