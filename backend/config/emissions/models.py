@@ -11,10 +11,27 @@ class Organization(models.Model):
 
 class DataSource(models.Model):
 
-    name = models.CharField(max_length=255)
+    SOURCE_TYPES = [
+        ('SAP', 'SAP'),
+        ('UTILITY', 'Utility'),
+        ('TRAVEL', 'Travel'),
+    ]
+
+    source_type = models.CharField(
+        max_length=20,
+        choices=SOURCE_TYPES,
+        default='SAP'
+    )
+
+    file_name = models.CharField(
+        max_length=255,
+        default='uploaded.csv'
+    )
+
+    uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        return self.file_name
 
 
 class EmissionRecord(models.Model):
